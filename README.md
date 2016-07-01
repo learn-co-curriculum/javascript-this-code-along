@@ -218,8 +218,7 @@ function serve() {
 }
 
 var gc = new Sandwich("white", ["cheese"], "Grilled Cheese");
-var pbj = new Sandwich("wheat", ["peanut butter", "raspberry jam"],
-"Peanut Butter & Jelly");
+var pbj = new Sandwich("wheat", ["peanut butter", "raspberry jam"], "Peanut Butter & Jelly");
 ```
 
 Okay, now we want to be able to do the equivalent of `gc.serve()`, but
@@ -318,6 +317,26 @@ serve.apply(pbj, ["Jesse"]);
 Very similar, but we need to wrap that second argument in brackets to
 make it an array.
 
+Let's add a function to tell a server where to deliver the sandwich to
+see how `call` and `apply` are different with more arguments.
+
+```js
+function deliverFood(customer, table) {
+  console.log("Delivering " + this.name + " to " + customer + " at table " + table);
+}
+
+deliverFood.call(gc, "Terry", "4");
+deliverFood.apply(pbj, ["Jesse", "15"]);
+```
+
+In this case, `deliverFood(customer, table)` takes two arguments. So
+when we use `call`, we pass first the sandwich we want to assign to
+`this`, then the two arguments in order.
+
+When we use `apply`, we also pass in the sandwich first to assign to
+`this`, but then we only pass one more argument, which is an array of
+the rest of the arguments for the `deliverFood` function.
+
 The choice to use `call` or `apply` here is essentially down to
 preference. They do the same things, with slightly different ways to
 pass arguments to the target function.
@@ -385,7 +404,7 @@ The `arguments` object doesn't have a `slice` method, because it isn't an array,
 **Advanced:** You can think of the `prototype` property of an object as the
 template for the non-instantiated version of that object. In the example
 above, rather than using `slice()` on an instance of `Array`, we're
-accessing the prototype of the `slice` method, which is why we have to
+accessing the `slice` method on the `Array` prototype, which is why we have to
 use `call` to give it a valid owner on which to operate. For more
 information about `prototype`, check out the [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype) for `Object.prototype`.
 
